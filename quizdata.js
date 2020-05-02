@@ -1,7 +1,8 @@
-{
+export default `{
     "quiz": [ 
         {
-            "easy": [
+            "id": "easy",
+            "questions": [
                 {
                     "question": "2+2=",
                     "answers": [1, 3, 4, 10],
@@ -25,7 +26,8 @@
             ]    
         },
         {
-            "hard": [
+            "id": "hard",
+            "questions": [
                 {
                     "question": "2*2=",
                     "answers": [1, 3, 4, 10],
@@ -50,4 +52,5 @@
         }
     ]
     
-}
+}`;
+//# sourceMappingURL=quizdata.js.map
