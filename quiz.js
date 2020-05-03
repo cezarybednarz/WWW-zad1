@@ -30,14 +30,21 @@ function getNumberOfQuestions(quiz) {
     var index = getQuizIndex(quiz);
     return Object.keys(quizJson[index].questions).length;
 }
-function viewQuestion(quiz, questionId) {
-    var percentDone = 100 * questionId / getNumberOfQuestions(quiz);
-    document.getElementById("progress-bar").setAttribute("value", String(percentDone));
+function viewQuestionById(quiz, questionId) {
+    var percentDone = 100 * (questionId + 1) / getNumberOfQuestions(quiz);
+    document.getElementById('progress-bar').setAttribute("value", String(percentDone));
     document.getElementById('question').textContent = getQuestionById(quizId, currentQuestion).question;
+    document.getElementById('question-name').textContent = "Pytanie " + String(questionId + 1);
+}
+function viewScore(quiz) {
 }
 const quizId = getQueryVariable("id");
 let quizName = document.getElementById("quiz-name");
 quizName.insertAdjacentHTML('afterbegin', quizId);
 let currentQuestion = 0;
-viewQuestion(quizId, currentQuestion);
+viewQuestionById(quizId, currentQuestion);
+function onNumberChange() {
+    console.log("xd");
+}
+document.getElementById("answer-box").addEventListener("change", onNumberChange);
 //# sourceMappingURL=quiz.js.map

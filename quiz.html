@@ -26,20 +26,34 @@
                     </div>
                 </section>    
 
-                <div id="progress-bar">
-                    <progress class="progress is-success" value="60" max="100"></progress>
+                <div>
+                    <progress class="progress is-success" id="progress-bar" value="60" max="100"></progress>
                 </div>
 
                 <div class="columns">
                     <div class="column">
                         <div class="card events-card">
                             <header class="card-header">
-                                <p class="card-header-title">
+                                <p class="card-header-title" id="question-name">
                                     Pytanie 1
                                 </p>
                             </header>
                             <div class="card-content" id="question">
-                                asdfasdfasd
+                                Pytanie nie jest załadowane.
+                            </div>
+                            <div class="field">
+                                <div class="control" id="answer-box">
+                                    <input class="input is-primary" onchange="onNumberChange()" type="text" placeholder="liczba całkowita"></input>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column is-quarter">
+                                    <a class="button is-small is-fullwidth is-info">kolejne</a>
+                                </div>
+                                <div class="column is-half"></div>
+                                <div class="column is-quarter">
+                                    <a class="button is-small is-fullwidth is-info">poprzednie</a>
+                                </div>
                             </div>
                             <div class="card-table">
                                 <div class="content">
