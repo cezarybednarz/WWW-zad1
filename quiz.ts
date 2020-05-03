@@ -1,7 +1,5 @@
 import jsonString from "./quizdata.js"
 
-const quizJson = JSON.parse(jsonString).quiz;
-
 function getQueryVariable(variable: string) {
     var query = window.location.search.substring(1);
     var vars = query.split('&');
@@ -13,6 +11,13 @@ function getQueryVariable(variable: string) {
     }
     console.log('Query variable %s not found', variable);
 }
+
+// === VARIABLES THAT DEFINE CURRENT STATE OF QUIZ ===
+const quizJson = JSON.parse(jsonString).quiz;
+let currentQuestion = 0;
+let quizId = getQueryVariable("id");
+// ===================================================
+
 
 function getQuizIndex(quiz: string): number {
     var index = -1;
@@ -47,20 +52,36 @@ function viewScore(quiz: string) {
     // empty for now
 }
 
-
-
-const quizId = getQueryVariable("id");
-let quizName = document.getElementById("quiz-name");
-quizName.insertAdjacentHTML('afterbegin', quizId)
-
-
-let currentQuestion = 0;
-viewQuestionById(quizId, currentQuestion);
-
-function onNumberChange() {
-    //var answerBox = document.getElementById('answer-box') as HTMLFormElement;
-    //console.log(answerBox.value);
-    console.log("xd");
+function goodAnswer(answer: string): boolean {
+    return !isNaN(Number(answer));
 }
 
-document.getElementById("answer-box").addEventListener("change", onNumberChange);
+function onAnswerUpdate() {
+    var answerBox = document.getElementById('answer-box') as HTMLTextAreaElement;
+    if(answerBox.value.length === 0) {
+        answerBox.setAttribute("class", "input is-primary");
+    }
+    else if(!goodAnswer(answerBox.value)) {
+        answerBox.setAttribute("class", "input is-danger");
+    }
+    else {
+        answerBox.setAttribute("class", "input is-info");
+    }   
+}
+
+function onClickNext() {
+    
+}
+
+
+// === CHANGING WEBSITE CONTENT ===
+document.getElementById("quiz-name").insertAdjacentHTML('afterbegin', quizId)
+document.getElementById('answer-box').addEventListener('input', onAnswerUpdate);
+
+// ================================
+
+
+
+// debug
+viewQuestionById(quizId, currentQuestion);
+

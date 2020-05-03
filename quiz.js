@@ -1,5 +1,4 @@
 import jsonString from "./quizdata.js";
-const quizJson = JSON.parse(jsonString).quiz;
 function getQueryVariable(variable) {
     var query = window.location.search.substring(1);
     var vars = query.split('&');
@@ -11,6 +10,9 @@ function getQueryVariable(variable) {
     }
     console.log('Query variable %s not found', variable);
 }
+const quizJson = JSON.parse(jsonString).quiz;
+let currentQuestion = 0;
+let quizId = getQueryVariable("id");
 function getQuizIndex(quiz) {
     var index = -1;
     for (var i = 0; i < Object.keys(quizJson).length; i++) {
@@ -38,13 +40,24 @@ function viewQuestionById(quiz, questionId) {
 }
 function viewScore(quiz) {
 }
-const quizId = getQueryVariable("id");
-let quizName = document.getElementById("quiz-name");
-quizName.insertAdjacentHTML('afterbegin', quizId);
-let currentQuestion = 0;
-viewQuestionById(quizId, currentQuestion);
-function onNumberChange() {
-    console.log("xd");
+function goodAnswer(answer) {
+    return !isNaN(Number(answer));
 }
-document.getElementById("answer-box").addEventListener("change", onNumberChange);
+function onAnswerUpdate() {
+    var answerBox = document.getElementById('answer-box');
+    if (answerBox.value.length === 0) {
+        answerBox.setAttribute("class", "input is-primary");
+    }
+    else if (!goodAnswer(answerBox.value)) {
+        answerBox.setAttribute("class", "input is-danger");
+    }
+    else {
+        answerBox.setAttribute("class", "input is-info");
+    }
+}
+function onClickNext() {
+}
+document.getElementById("quiz-name").insertAdjacentHTML('afterbegin', quizId);
+document.getElementById('answer-box').addEventListener('input', onAnswerUpdate);
+viewQuestionById(quizId, currentQuestion);
 //# sourceMappingURL=quiz.js.map
