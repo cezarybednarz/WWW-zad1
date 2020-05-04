@@ -85,9 +85,16 @@
                         <article class="tile is-child notification is-success">
                             <p class="title" id="completed-tasks">4/5</p>
                             <p class="subtitle">Wypełnione</p>
-                            <button class="button is-warning is-light" id="button-finish">
-                                Zakończ
-                            </button>
+                            <div class="field is-grouped">
+                                <p class="control">
+                                    <button class="button is-warning is-light" id="button-finish">
+                                        Zakończ
+                                    </button>
+                                </p>
+                                <button class="button is-danger" id="button-cancel-1">
+                                    Anuluj
+                                </button>
+                            </div>
                         </article>
                     </div>
                 </div>
@@ -104,8 +111,8 @@
             </header>
             <!-- RESULT TABLE -->
             <section class="modal-card-body">
-                <div class = "container">
-                    <table class = "table">
+                <div class="container">
+                    <table class="table">
                        <thead>
                           <tr>
                              <th>Pytanie</th>
@@ -128,7 +135,7 @@
                 <button class="button is-success" id="button-save" href="index.html">
                     Zapisz wynik
                 </button>
-                <button class="button" id="button-cancel" href="index.html">
+                <button class="button" id="button-cancel-2">
                     Wyjdź bez zapisywania
                 </button>
             </footer>

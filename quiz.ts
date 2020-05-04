@@ -1,4 +1,5 @@
 import jsonString from "./quizdata.js"
+import {putScoreInStorage} from "./database.js"
 
 function getQueryVariable(variable: string) {
     var query = window.location.search.substring(1);
@@ -19,6 +20,8 @@ let quizId = getQueryVariable("id");
 let answers: Array<string> = [];
 let seconds: Array<number> = [];
 let quizFinished = false; 
+let totalTime = 0;
+let totalPenalty = 0;
 // ===================================================
 
 
@@ -115,7 +118,6 @@ function viewScore(quiz: string) {
     document.getElementById("quiz-summary").setAttribute("class", "modal is-active");
 
     var resultTable = document.getElementById("result-table") as HTMLTableElement;
-    var totalTime = 0, totalPenalty = 0;
     for(var i = 0; i < getNumberOfQuestions(quiz); i++) {
         totalTime += seconds[i];
         let penalty = String(getPenalty(quizId));
@@ -194,13 +196,13 @@ function onClickSaveResult() {
     if(!quizFinished) {
         return;
     }
+    
+    putScoreInStorage(quizId, totalTime+totalPenalty, totalTime);
+
     window.location.href = "index.html";
 }
 
 function onClickCancelResult() {
-    if(!quizFinished) {
-        return;
-    }
     window.location.href = "index.html";
 }
 
@@ -230,11 +232,8 @@ document.getElementById("button-next").addEventListener('click', onClickNext);
 document.getElementById("button-prev").addEventListener('click', onClickPrevious);
 document.getElementById("button-finish").addEventListener('click', onClickFinish);
 document.getElementById("button-save").addEventListener('click', onClickSaveResult);
-document.getElementById("button-cancel").addEventListener('click', onClickCancelResult);
+document.getElementById("button-cancel-1").addEventListener('click', onClickCancelResult);
+document.getElementById("button-cancel-2").addEventListener('click', onClickCancelResult);
 startCountdown();
-
-
 // ================================
 
-
-// debug
