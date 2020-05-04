@@ -5,7 +5,7 @@ let questionTable: HTMLTableElement = document.getElementById("question-list") a
 
 for(var i = 0; Object.keys(quizJson).length; i++) {
     var questionId = quizJson[i].id;
-    questionTable.insertAdjacentHTML('afterbegin', 
+    questionTable.insertAdjacentHTML('beforeend', 
     `<tr>
         <td width="5%"><i class="fa fa-bell-o"></i></td>
         <td>${questionId}</td>

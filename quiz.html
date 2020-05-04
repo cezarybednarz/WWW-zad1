@@ -15,7 +15,6 @@
         <div class="columns">
             <!-- FIRST COLUMN -->
             <div class="column is-6">
-
                 <section class="hero is-info welcome is-small">
                     <div class="hero-body">
                         <div class="container">
@@ -97,20 +96,42 @@
     </div>
 
     <!-- QUIZ SUMMARY -->
-    <div class="modal">
+    <div class="modal" id="quiz-summary">
         <div class="modal-background"></div>
         <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Modal title</p>
-            <button class="delete" aria-label="close"></button>
-          </header>
-          <section class="modal-card-body">
-            <!-- Content ... -->
-          </section>
-          <footer class="modal-card-foot">
-            <button class="button is-success">Save changes</button>
-            <button class="button">Cancel</button>
-          </footer>
+            <header class="modal-card-head">
+                <p class="modal-card-title">Wynik quizu</p>
+            </header>
+            <!-- RESULT TABLE -->
+            <section class="modal-card-body">
+                <div class = "container">
+                    <table class = "table">
+                       <thead>
+                          <tr>
+                             <th>Pytanie</th>
+                             <th>Twój wynik</th>
+                             <th>Poprawny wynik</th>
+                             <th>Czas</th>
+                             <th>Kara</th>
+                          </tr>
+                       </thead>
+                       <tbody id="result-table">
+                          <!-- RESULTS -->
+                       </tbody>
+                    </table>
+                 </div>
+                 <div class="content" id="total-result">
+                    <!-- TIME RESULTS -->
+                 </div>
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success" id="button-save" href="index.html">
+                    Zapisz wynik
+                </button>
+                <button class="button" id="button-cancel" href="index.html">
+                    Wyjdź bez zapisywania
+                </button>
+            </footer>
         </div>
       </div>
 

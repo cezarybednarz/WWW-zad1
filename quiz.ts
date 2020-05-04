@@ -49,7 +49,7 @@ function getNumberOfQuestions(quiz : string): number {
 }
 
 function goodAnswer(answer: string): boolean {
-    return !isNaN(Number(answer));
+    return /^\d+$/.test(answer);
 }
 
 function getNumberOfGoodAnswers(quiz: string): number {
@@ -107,13 +107,48 @@ function viewQuestionById(quiz: string, questionId: number) {
 }
 
 function viewScore(quiz: string) {
-    console.log("koncze quiz");
+    if(!quizFinished) {
+        return;
+    }
+
+    document.title = "Podsumowanie"
+    document.getElementById("quiz-summary").setAttribute("class", "modal is-active");
+
+    var resultTable = document.getElementById("result-table") as HTMLTableElement;
+    var totalTime = 0, totalPenalty = 0;
+    for(var i = 0; i < getNumberOfQuestions(quiz); i++) {
+        totalTime += seconds[i];
+        let penalty = String(getPenalty(quizId));
+        var correctAnswer = String(getQuestionById(quizId, i).good_answer);
+        var style = "";
+        if(answers[i] === correctAnswer) {
+            penalty = "-";
+            style = 'style="background-color:#b3ffb3"';
+        }
+        else {
+            penalty += " s";
+            totalPenalty += getPenalty(quizId);
+            style = 'style="background-color:#ffcccc"';
+        }
+        resultTable.insertAdjacentHTML('beforeend', 
+        `<tr ${style}>
+            <td class="has-text-weight-medium">${i+1}</td>
+            <td>${answers[i]}</td>
+            <td>${correctAnswer}</td>
+            <td>${seconds[i] + " s"}</td>
+            <td>${penalty}</td>
+        </tr>
+        `);
+    }
+    document.getElementById("total-result").insertAdjacentHTML('afterbegin',  
+    `<br>
+    <p>
+    Całkowity wynik: <b>${totalTime + totalPenalty}</b>   (<b>${totalTime}</b> czas, <b>${totalPenalty}</b> kara)
+    </p>
+    `);
 }
 
 function updateButtons() {
-    if(quizFinished) {
-        return;
-    }
     var prevButton = document.getElementById("button-prev") as HTMLButtonElement;
     if(currentQuestion === 0) {
         prevButton.style.visibility = "hidden";
@@ -132,9 +167,6 @@ function updateButtons() {
 }
 
 function onClickPrevious() {
-    if(quizFinished) {
-        return;
-    }
     if(currentQuestion > 0) {
         currentQuestion--;
     }
@@ -143,9 +175,6 @@ function onClickPrevious() {
 }
 
 function onClickNext() {
-    if(quizFinished) {
-        return;
-    }
     var button = document.getElementById("button-next") as HTMLButtonElement;
     if(currentQuestion + 1 < getNumberOfQuestions(quizId)) {
         currentQuestion++;
@@ -161,7 +190,25 @@ function onClickFinish() {
     }
 }
 
+function onClickSaveResult() {
+    if(!quizFinished) {
+        return;
+    }
+    window.location.href = "index.html";
+}
+
+function onClickCancelResult() {
+    if(!quizFinished) {
+        return;
+    }
+    window.location.href = "index.html";
+}
+
 function startCountdown() {
+    for(var i = 0; i < getNumberOfQuestions(quizId); i++) {
+        seconds[i] = 0;
+    }
+
     let counter = 0;
       
     const interval = setInterval(() => {
@@ -174,7 +221,6 @@ function startCountdown() {
     }, 1000);
 }
 
-
 // === CHANGING WEBSITE CONTENT ===
 viewQuestionById(quizId, currentQuestion);
 document.getElementById("quiz-name").textContent = quizId;
@@ -183,11 +229,12 @@ document.getElementById("answer-box").addEventListener('input', onAnswerUpdate);
 document.getElementById("button-next").addEventListener('click', onClickNext);
 document.getElementById("button-prev").addEventListener('click', onClickPrevious);
 document.getElementById("button-finish").addEventListener('click', onClickFinish);
+document.getElementById("button-save").addEventListener('click', onClickSaveResult);
+document.getElementById("button-cancel").addEventListener('click', onClickCancelResult);
 startCountdown();
+
 
 // ================================
 
 
-
 // debug
-
