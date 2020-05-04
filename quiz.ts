@@ -18,6 +18,7 @@ let currentQuestion = 0;
 let quizId = getQueryVariable("id");
 let answers: Array<string> = [];
 let seconds: Array<number> = [];
+let quizFinished = false; 
 // ===================================================
 
 
@@ -30,6 +31,10 @@ function getQuizIndex(quiz: string): number {
         }
     }
     return index;
+}
+
+function getPenalty(quiz: string): number {
+    return parseInt(quizJson[getQuizIndex(quiz)].penalty);
 }
 
 function getQuestionById(quiz: string, questionId: number) {
@@ -47,6 +52,16 @@ function goodAnswer(answer: string): boolean {
     return !isNaN(Number(answer));
 }
 
+function getNumberOfGoodAnswers(quiz: string): number {
+    var goodAnswers = 0;
+    for(var i = 0; i < getNumberOfQuestions(quizId); i++) {
+        if(goodAnswer(answers[i])) {
+            goodAnswers++;
+        }
+    }
+    return goodAnswers;
+}
+
 function onAnswerUpdate() {
     var answerBox = document.getElementById('answer-box') as HTMLTextAreaElement;
     if(answerBox.value.length === 0) {
@@ -62,14 +77,18 @@ function onAnswerUpdate() {
         answers[currentQuestion] = answerBox.value;
     }   
 
-    var goodAnswers = 0;
-    for(var i = 0; i < getNumberOfQuestions(quizId); i++) {
-        if(goodAnswer(answers[i])) {
-            goodAnswers++;
-        }
+    
+    document.getElementById("completed-tasks").textContent = String(getNumberOfGoodAnswers(quizId)) 
+    + "/" + String(getNumberOfQuestions(quizId));
+    var buttonFinish = document.getElementById("button-finish") as HTMLButtonElement;
+
+    if(getNumberOfGoodAnswers(quizId) === getNumberOfQuestions(quizId)) {
+        buttonFinish.setAttribute("class", "button is-warning");
+    }
+    else {
+        buttonFinish.setAttribute("class", "button is-warning is-light");
     }
 
-    document.getElementById("completed-tasks").textContent = String(goodAnswers) + "/" + String(getNumberOfQuestions(quizId));
 }
 
 function viewQuestionById(quiz: string, questionId: number) {
@@ -88,10 +107,13 @@ function viewQuestionById(quiz: string, questionId: number) {
 }
 
 function viewScore(quiz: string) {
-    // empty for now
+    console.log("koncze quiz");
 }
 
 function updateButtons() {
+    if(quizFinished) {
+        return;
+    }
     var prevButton = document.getElementById("button-prev") as HTMLButtonElement;
     if(currentQuestion === 0) {
         prevButton.style.visibility = "hidden";
@@ -110,6 +132,9 @@ function updateButtons() {
 }
 
 function onClickPrevious() {
+    if(quizFinished) {
+        return;
+    }
     if(currentQuestion > 0) {
         currentQuestion--;
     }
@@ -118,6 +143,9 @@ function onClickPrevious() {
 }
 
 function onClickNext() {
+    if(quizFinished) {
+        return;
+    }
     var button = document.getElementById("button-next") as HTMLButtonElement;
     if(currentQuestion + 1 < getNumberOfQuestions(quizId)) {
         currentQuestion++;
@@ -127,14 +155,19 @@ function onClickNext() {
 }
 
 function onClickFinish() {
-    // empty for now
+    if(getNumberOfGoodAnswers(quizId) === getNumberOfQuestions(quizId)) {
+        quizFinished = true;
+        viewScore(quizId);
+    }
 }
 
 function startCountdown() {
     let counter = 0;
       
     const interval = setInterval(() => {
-        console.log(counter);
+        if(quizFinished) {
+            clearInterval(interval);
+        }
         counter++;
         seconds[currentQuestion]++;
         document.getElementById('timer').textContent = String(counter) + " s";
@@ -144,11 +177,14 @@ function startCountdown() {
 
 // === CHANGING WEBSITE CONTENT ===
 viewQuestionById(quizId, currentQuestion);
-document.getElementById("quiz-name").insertAdjacentHTML('afterbegin', quizId)
+document.getElementById("quiz-name").textContent = quizId;
+document.getElementById("penalty-info").textContent = "kara za niepoprawną odpowiedź: " + String(getPenalty(quizId)) + " s";
 document.getElementById("answer-box").addEventListener('input', onAnswerUpdate);
 document.getElementById("button-next").addEventListener('click', onClickNext);
 document.getElementById("button-prev").addEventListener('click', onClickPrevious);
+document.getElementById("button-finish").addEventListener('click', onClickFinish);
 startCountdown();
+
 // ================================
 
 

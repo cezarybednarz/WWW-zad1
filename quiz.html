@@ -10,6 +10,7 @@
 </head> 
   
 <body> 
+    <!-- QUIZ CONTENT -->
     <div class="container">
         <div class="columns">
             <!-- FIRST COLUMN -->
@@ -20,8 +21,11 @@
                         <div class="container">
                             <h1 class="title" id="quiz-name">
                             </h1>
-                            <h3 class="subtitle">
+                            <h2 class="subtitle">
                                 Wpisz liczbę całkowitą równą wynikowi zadania. Musisz oddać odpowiedź w każdym pytaniu aby zakończyć quiz.
+                            </h2>
+                            <h3 class="content" id="penalty-info">
+                                kara za niepoprawną odpowiedź: 4 s
                             </h3>
                         </div>
                     </div>
@@ -92,6 +96,23 @@
         </div>
     </div>
 
+    <!-- QUIZ SUMMARY -->
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Modal title</p>
+            <button class="delete" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body">
+            <!-- Content ... -->
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success">Save changes</button>
+            <button class="button">Cancel</button>
+          </footer>
+        </div>
+      </div>
 
     <!-- SCRIPT -->
     <script type="module" src="quiz.js"></script>

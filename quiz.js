@@ -15,6 +15,7 @@ let currentQuestion = 0;
 let quizId = getQueryVariable("id");
 let answers = [];
 let seconds = [];
+let quizFinished = false;
 function getQuizIndex(quiz) {
     var index = -1;
     for (var i = 0; i < Object.keys(quizJson).length; i++) {
@@ -24,6 +25,9 @@ function getQuizIndex(quiz) {
         }
     }
     return index;
+}
+function getPenalty(quiz) {
+    return parseInt(quizJson[getQuizIndex(quiz)].penalty);
 }
 function getQuestionById(quiz, questionId) {
     var index = getQuizIndex(quiz);
@@ -36,6 +40,15 @@ function getNumberOfQuestions(quiz) {
 }
 function goodAnswer(answer) {
     return !isNaN(Number(answer));
+}
+function getNumberOfGoodAnswers(quiz) {
+    var goodAnswers = 0;
+    for (var i = 0; i < getNumberOfQuestions(quizId); i++) {
+        if (goodAnswer(answers[i])) {
+            goodAnswers++;
+        }
+    }
+    return goodAnswers;
 }
 function onAnswerUpdate() {
     var answerBox = document.getElementById('answer-box');
@@ -51,13 +64,15 @@ function onAnswerUpdate() {
         answerBox.setAttribute("class", "input is-info");
         answers[currentQuestion] = answerBox.value;
     }
-    var goodAnswers = 0;
-    for (var i = 0; i < getNumberOfQuestions(quizId); i++) {
-        if (goodAnswer(answers[i])) {
-            goodAnswers++;
-        }
+    document.getElementById("completed-tasks").textContent = String(getNumberOfGoodAnswers(quizId))
+        + "/" + String(getNumberOfQuestions(quizId));
+    var buttonFinish = document.getElementById("button-finish");
+    if (getNumberOfGoodAnswers(quizId) === getNumberOfQuestions(quizId)) {
+        buttonFinish.setAttribute("class", "button is-warning");
     }
-    document.getElementById("completed-tasks").textContent = String(goodAnswers) + "/" + String(getNumberOfQuestions(quizId));
+    else {
+        buttonFinish.setAttribute("class", "button is-warning is-light");
+    }
 }
 function viewQuestionById(quiz, questionId) {
     var percentDone = 100 * (questionId + 1) / getNumberOfQuestions(quiz);
@@ -74,8 +89,12 @@ function viewQuestionById(quiz, questionId) {
     onAnswerUpdate();
 }
 function viewScore(quiz) {
+    console.log("koncze quiz");
 }
 function updateButtons() {
+    if (quizFinished) {
+        return;
+    }
     var prevButton = document.getElementById("button-prev");
     if (currentQuestion === 0) {
         prevButton.style.visibility = "hidden";
@@ -92,6 +111,9 @@ function updateButtons() {
     }
 }
 function onClickPrevious() {
+    if (quizFinished) {
+        return;
+    }
     if (currentQuestion > 0) {
         currentQuestion--;
     }
@@ -99,6 +121,9 @@ function onClickPrevious() {
     viewQuestionById(quizId, currentQuestion);
 }
 function onClickNext() {
+    if (quizFinished) {
+        return;
+    }
     var button = document.getElementById("button-next");
     if (currentQuestion + 1 < getNumberOfQuestions(quizId)) {
         currentQuestion++;
@@ -107,20 +132,28 @@ function onClickNext() {
     viewQuestionById(quizId, currentQuestion);
 }
 function onClickFinish() {
+    if (getNumberOfGoodAnswers(quizId) === getNumberOfQuestions(quizId)) {
+        quizFinished = true;
+        viewScore(quizId);
+    }
 }
 function startCountdown() {
     let counter = 0;
     const interval = setInterval(() => {
-        console.log(counter);
+        if (quizFinished) {
+            clearInterval(interval);
+        }
         counter++;
         seconds[currentQuestion]++;
         document.getElementById('timer').textContent = String(counter) + " s";
     }, 1000);
 }
 viewQuestionById(quizId, currentQuestion);
-document.getElementById("quiz-name").insertAdjacentHTML('afterbegin', quizId);
+document.getElementById("quiz-name").textContent = quizId;
+document.getElementById("penalty-info").textContent = "kara za niepoprawną odpowiedź: " + String(getPenalty(quizId)) + " s";
 document.getElementById("answer-box").addEventListener('input', onAnswerUpdate);
 document.getElementById("button-next").addEventListener('click', onClickNext);
 document.getElementById("button-prev").addEventListener('click', onClickPrevious);
+document.getElementById("button-finish").addEventListener('click', onClickFinish);
 startCountdown();
 //# sourceMappingURL=quiz.js.map

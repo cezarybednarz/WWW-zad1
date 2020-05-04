@@ -2,6 +2,7 @@ export default `{
     "quiz": [ 
         {
             "id": "easy",
+            "penalty": "4",
             "questions": [
                 {
                     "question": "2+2=",
@@ -27,6 +28,7 @@ export default `{
         },
         {
             "id": "hard",
+            "penalty": "8",
             "questions": [
                 {
                     "question": "2*2=",
