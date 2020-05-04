@@ -30,7 +30,7 @@ function viewQuizTable() {
 function viewQuizStatsById(quizId) {
     var resultTable = getTopScoresWithId(quizId);
     var statsTable = document.getElementById("stats-table");
-    statsTable.insertAdjacentHTML('beforeend', `<article class="tile is-child notification is-light">
+    statsTable.insertAdjacentHTML('beforeend', `<article class="tile is-child box">
         <p class="subtitle">${quizId}</p>
         <p class="content">
             <table class="table">
@@ -78,8 +78,16 @@ function viewQuizStats() {
     }
 }
 function viewGlobalStats() {
+    var statSolved = document.getElementById("stat-solved");
+    var statCorrect = document.getElementById("stat-correct");
+    var statAvg = document.getElementById("stat-avg");
+    statSolved.textContent = String(totalTests);
+    statCorrect.textContent = String((100 * totalCorrectQuestions / totalQuestions).toFixed(0)) + "%";
+    statAvg.textContent = String((totalSeconds / totalTests).toFixed(2)) + " s";
 }
 viewQuizTable();
 viewQuizStats();
-viewGlobalStats();
+if (totalTests > 0) {
+    viewGlobalStats();
+}
 //# sourceMappingURL=index.js.map

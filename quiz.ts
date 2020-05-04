@@ -53,7 +53,7 @@ function getNumberOfQuestions(quiz : string): number {
 }
 
 function goodAnswer(answer: string): boolean {
-    return /^\d+$/.test(answer);
+    return /^-?\d+\d*$/.test(answer);
 }
 
 function getNumberOfGoodAnswers(quiz: string): number {
@@ -201,7 +201,7 @@ function onClickSaveResult() {
     
     putScoreInStorage(quizId, totalTime+totalPenalty, totalTime, Date.now(), 
         totalCorrect, getNumberOfQuestions(quizId));
-        
+
 
     window.location.href = "index.html";
 }

@@ -43,7 +43,7 @@ function getNumberOfQuestions(quiz) {
     return Object.keys(quizJson[index].questions).length;
 }
 function goodAnswer(answer) {
-    return /^\d+$/.test(answer);
+    return /^-?\d+\d*$/.test(answer);
 }
 function getNumberOfGoodAnswers(quiz) {
     var goodAnswers = 0;
