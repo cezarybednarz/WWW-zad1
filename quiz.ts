@@ -17,6 +17,7 @@ const quizJson = JSON.parse(jsonString).quiz;
 let currentQuestion = 0;
 let quizId = getQueryVariable("id");
 let answers: Array<string> = [];
+let seconds: Array<number> = [];
 // ===================================================
 
 
@@ -60,6 +61,15 @@ function onAnswerUpdate() {
         answerBox.setAttribute("class", "input is-info");
         answers[currentQuestion] = answerBox.value;
     }   
+
+    var goodAnswers = 0;
+    for(var i = 0; i < getNumberOfQuestions(quizId); i++) {
+        if(goodAnswer(answers[i])) {
+            goodAnswers++;
+        }
+    }
+
+    document.getElementById("completed-tasks").textContent = String(goodAnswers) + "/" + String(getNumberOfQuestions(quizId));
 }
 
 function viewQuestionById(quiz: string, questionId: number) {
@@ -116,9 +126,19 @@ function onClickNext() {
     viewQuestionById(quizId, currentQuestion);
 }
 
-
 function onClickFinish() {
+    // empty for now
+}
 
+function startCountdown() {
+    let counter = 0;
+      
+    const interval = setInterval(() => {
+        console.log(counter);
+        counter++;
+        seconds[currentQuestion]++;
+        document.getElementById('timer').textContent = String(counter) + " s";
+    }, 1000);
 }
 
 
@@ -128,6 +148,7 @@ document.getElementById("quiz-name").insertAdjacentHTML('afterbegin', quizId)
 document.getElementById("answer-box").addEventListener('input', onAnswerUpdate);
 document.getElementById("button-next").addEventListener('click', onClickNext);
 document.getElementById("button-prev").addEventListener('click', onClickPrevious);
+startCountdown();
 // ================================
 
 

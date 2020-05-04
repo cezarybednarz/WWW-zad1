@@ -14,6 +14,7 @@ const quizJson = JSON.parse(jsonString).quiz;
 let currentQuestion = 0;
 let quizId = getQueryVariable("id");
 let answers = [];
+let seconds = [];
 function getQuizIndex(quiz) {
     var index = -1;
     for (var i = 0; i < Object.keys(quizJson).length; i++) {
@@ -50,6 +51,13 @@ function onAnswerUpdate() {
         answerBox.setAttribute("class", "input is-info");
         answers[currentQuestion] = answerBox.value;
     }
+    var goodAnswers = 0;
+    for (var i = 0; i < getNumberOfQuestions(quizId); i++) {
+        if (goodAnswer(answers[i])) {
+            goodAnswers++;
+        }
+    }
+    document.getElementById("completed-tasks").textContent = String(goodAnswers) + "/" + String(getNumberOfQuestions(quizId));
 }
 function viewQuestionById(quiz, questionId) {
     var percentDone = 100 * (questionId + 1) / getNumberOfQuestions(quiz);
@@ -100,9 +108,19 @@ function onClickNext() {
 }
 function onClickFinish() {
 }
+function startCountdown() {
+    let counter = 0;
+    const interval = setInterval(() => {
+        console.log(counter);
+        counter++;
+        seconds[currentQuestion]++;
+        document.getElementById('timer').textContent = String(counter) + " s";
+    }, 1000);
+}
 viewQuestionById(quizId, currentQuestion);
 document.getElementById("quiz-name").insertAdjacentHTML('afterbegin', quizId);
 document.getElementById("answer-box").addEventListener('input', onAnswerUpdate);
 document.getElementById("button-next").addEventListener('click', onClickNext);
 document.getElementById("button-prev").addEventListener('click', onClickPrevious);
+startCountdown();
 //# sourceMappingURL=quiz.js.map
