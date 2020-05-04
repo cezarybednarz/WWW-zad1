@@ -1,2 +1,1 @@
-compile with command 'tsc'
-main screen in index.html
+compile with command 'tsc', main menu in index.html
