@@ -19,6 +19,7 @@ let seconds = [];
 let quizFinished = false;
 let totalTime = 0;
 let totalPenalty = 0;
+let totalCorrect = 0;
 function getQuizIndex(quiz) {
     var index = -1;
     for (var i = 0; i < Object.keys(quizJson).length; i++) {
@@ -106,6 +107,7 @@ function viewScore(quiz) {
         if (answers[i] === correctAnswer) {
             penalty = "-";
             style = 'style="background-color:#b3ffb3"';
+            totalCorrect++;
         }
         else {
             penalty += " s";
@@ -168,7 +170,7 @@ function onClickSaveResult() {
     if (!quizFinished) {
         return;
     }
-    putScoreInStorage(quizId, totalTime + totalPenalty, totalTime);
+    putScoreInStorage(quizId, totalTime + totalPenalty, totalTime, Date.now(), totalCorrect, getNumberOfQuestions(quizId));
     window.location.href = "index.html";
 }
 function onClickCancelResult() {

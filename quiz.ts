@@ -22,6 +22,7 @@ let seconds: Array<number> = [];
 let quizFinished = false; 
 let totalTime = 0;
 let totalPenalty = 0;
+let totalCorrect = 0;
 // ===================================================
 
 
@@ -126,6 +127,7 @@ function viewScore(quiz: string) {
         if(answers[i] === correctAnswer) {
             penalty = "-";
             style = 'style="background-color:#b3ffb3"';
+            totalCorrect++;
         }
         else {
             penalty += " s";
@@ -197,7 +199,9 @@ function onClickSaveResult() {
         return;
     }
     
-    putScoreInStorage(quizId, totalTime+totalPenalty, totalTime);
+    putScoreInStorage(quizId, totalTime+totalPenalty, totalTime, Date.now(), 
+        totalCorrect, getNumberOfQuestions(quizId));
+        
 
     window.location.href = "index.html";
 }

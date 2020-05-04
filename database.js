@@ -1,9 +1,9 @@
-export function putScoreInStorage(quizId, score, time) {
+export function putScoreInStorage(quizId, score, time, date, correct, total) {
     var currentTable = JSON.parse(localStorage.getItem(quizId));
     if (currentTable == null) {
         currentTable = [];
     }
-    currentTable.push({ score: score, time: time });
+    currentTable.push({ score: score, time: time, date: date, correct: correct, total: total });
     localStorage.setItem(quizId, JSON.stringify(currentTable));
 }
 export function getTopScoresWithId(quizId) {

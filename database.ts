@@ -1,12 +1,13 @@
 
 
 
-export function putScoreInStorage(quizId: string, score: number, time: number) {
+export function putScoreInStorage(quizId: string, score: number, time: number, date: number,
+    correct: number, total: number) {
     var currentTable = JSON.parse(localStorage.getItem(quizId));
     if(currentTable == null) {
         currentTable = [];
     }
-    currentTable.push({score: score, time: time});
+    currentTable.push({score: score, time: time, date: date, correct: correct, total: total});
     localStorage.setItem(quizId, JSON.stringify(currentTable));
 }
 

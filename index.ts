@@ -2,6 +2,22 @@ import jsonString from "./quizdata.js"
 import {getTopScoresWithId} from "./database.js"
 
 const quizJson = JSON.parse(jsonString).quiz;
+let totalTests = 0;
+let totalSeconds = 0;
+let totalQuestions = 0;
+let totalCorrectQuestions = 0;
+
+function getDateFromTimestamp(ts: number): string {
+    var a = new Date(ts);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+    return date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+}
 
 function viewQuizTable() {
     let quizTable: HTMLTableElement = document.getElementById("question-list") as HTMLTableElement;
@@ -26,9 +42,11 @@ function viewQuizStatsById(quizId: string) {
             <table class="table">
                 <thead id="thead-${quizId}">
                     <tr>
-                        <th>Miejsce</th>
+                        <th></th>
                         <th>Wynik</th>
                         <th>Czas</th>
+                        <th>Poprawne</th>
+                        <th>Data</th>
                     </tr>
                 </thead>
                 <tbody id='table-${quizId}'>
@@ -48,9 +66,15 @@ function viewQuizStatsById(quizId: string) {
             `<tr>
                 <td><b>${i+1}</b></td>
                 <td>${resultTable[i].score}</td>
-                <td>${resultTable[i].time}</td>
+                <td>${resultTable[i].time} s</td>
+                <td>${resultTable[i].correct}/${resultTable[i].total}</td>
+                <td>${getDateFromTimestamp(resultTable[i].date)}</td>
             </tr>
             `);
+            totalTests++;
+            totalQuestions += resultTable[i].total;
+            totalCorrectQuestions += resultTable[i].correct;
+            totalSeconds += resultTable[i].time;
         }
     }
 }
@@ -62,9 +86,13 @@ function viewQuizStats() {
     }
 }
 
+function viewGlobalStats() {
+    
+}
 
 // === CHANGING WEBSITE CONTENT ===
 viewQuizTable();
 viewQuizStats();
+viewGlobalStats();
 // ================================
 
